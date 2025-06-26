@@ -1,22 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.crm')
 
-@section('title', 'Kalender - Beratungs-CRM')
-@section('page-title', 'Kalender')
+@section('title', 'Kalender')
+@section('header', 'Kalender - ' . $date->locale('de')->isoFormat('MMMM YYYY'))
 
-@section('page-actions')
+@section('header-actions')
     <div class="btn-group" role="group">
         <a href="{{ route('calendar.index', ['month' => $date->copy()->subMonth()->format('Y-m')]) }}" class="btn btn-outline-secondary">
-            <i class="fas fa-chevron-left"></i> Vorheriger Monat
+            <i class="bi bi-chevron-left"></i> Vorheriger Monat
         </a>
         <a href="{{ route('calendar.index', ['month' => Carbon\Carbon::now()->format('Y-m')]) }}" class="btn btn-outline-primary">
             Heute
         </a>
         <a href="{{ route('calendar.index', ['month' => $date->copy()->addMonth()->format('Y-m')]) }}" class="btn btn-outline-secondary">
-            Nächster Monat <i class="fas fa-chevron-right"></i>
+            Nächster Monat <i class="bi bi-chevron-right"></i>
         </a>
-        <a href="{{ route('sessions.create') }}" class="btn btn-primary ms-2">
-            <i class="fas fa-plus"></i> Neuer Termin
-        </a>
+        @if(auth()->user()->canManageSessions())
+            <a href="{{ route('sessions.create') }}" class="btn btn-primary ms-2">
+                <i class="bi bi-plus"></i> Neuer Termin
+            </a>
+        @endif
     </div>
 @endsection
 

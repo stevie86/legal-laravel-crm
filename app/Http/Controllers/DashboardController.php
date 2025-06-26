@@ -12,50 +12,37 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $today = Carbon::today();
-        $thisWeek = Carbon::now()->startOfWeek();
         $thisMonth = Carbon::now()->startOfMonth();
 
-        // Statistiken
+        // Basis-Statistiken basierend auf Berechtigungen
         $stats = [
-            'total_clients' => Client::where('status', 'active')->count(),
-            'sessions_today' => CounselingSession::whereDate('scheduled_at', $today)->count(),
-            'sessions_this_week' => CounselingSession::whereBetween('scheduled_at', [$thisWeek, $thisWeek->copy()->endOfWeek()])->count(),
-            'sessions_this_month' => CounselingSession::whereBetween('scheduled_at', [$thisMonth, $thisMonth->copy()->endOfMonth()])->count(),
+            'total_clients' => $user->canManageClients() ? Client::count() : 0,
+            'total_sessions' => $user->canManageSessions() ? CounselingSession::count() : 0,
+            'sessions_this_month' => $user->canManageSessions() ? 
+                CounselingSession::whereMonth('scheduled_at', now()->month)->count() : 0,
+            'upcoming_sessions' => $user->canManageSessions() ? 
+                CounselingSession::where('scheduled_at', '>', now())->count() : 0,
         ];
 
-        // Heutige Termine
-        $todaysSessions = CounselingSession::with(['client', 'user'])
-            ->whereDate('scheduled_at', $today)
-            ->orderBy('scheduled_at')
-            ->get();
+        // Detaillierte Daten nur für berechtigte Benutzer
+        if ($user->canManageClients()) {
+            $stats['recent_clients'] = Client::latest()->take(5)->get();
+        } else {
+            $stats['recent_clients'] = collect();
+        }
 
-        // Kommende Termine (nächste 7 Tage)
-        $upcomingSessions = CounselingSession::with(['client', 'user'])
-            ->whereBetween('scheduled_at', [Carbon::now(), Carbon::now()->addDays(7)])
-            ->where('status', 'scheduled')
-            ->orderBy('scheduled_at')
-            ->limit(10)
-            ->get();
+        if ($user->canManageSessions()) {
+            $stats['upcoming_sessions_list'] = CounselingSession::with('client')
+                ->where('scheduled_at', '>', now())
+                ->orderBy('scheduled_at')
+                ->take(5)
+                ->get();
+        } else {
+            $stats['upcoming_sessions_list'] = collect();
+        }
 
-        // Neueste Klienten
-        $recentClients = Client::where('status', 'active')
-            ->orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get();
-
-        // Kalender-Events für heute
-        $todaysEvents = CalendarEvent::with(['client', 'counselingSession'])
-            ->whereDate('start_time', $today)
-            ->orderBy('start_time')
-            ->get();
-
-        return view('dashboard', compact(
-            'stats',
-            'todaysSessions',
-            'upcomingSessions',
-            'recentClients',
-            'todaysEvents'
-        ));
+        return view('dashboard', compact('stats'));
     }
 }

@@ -1,0 +1,36 @@
+name: Fly Deploy
+
+on:
+  push:
+    branches:
+      - main # Or your primary branch, e.g., master
+
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Match your Dockerfile PHP version
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-dev
+
+      - name: Run tests
+        run: php artisan test
+        env:
+          # If your tests need a database, configure an in-memory one here
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+
+      - name: Deploy to Fly.io
+        uses: superfly/fly-pr-review-apps@v1 # This action also handles regular deploys
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        with:
+          args: "deploy --remote-only"

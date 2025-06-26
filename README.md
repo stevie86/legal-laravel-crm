@@ -1,61 +1,370 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Beratungs-CRM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Ein modernes Customer Relationship Management System speziell für Beratungsunternehmen, entwickelt mit Laravel 12 und modernen Web-Technologien.
 
-## About Laravel
+## 📋 Projektübersicht
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Das Beratungs-CRM ist eine umfassende Lösung zur Verwaltung von Klienten, Beratungssitzungen und Dokumenten. Es bietet eine intuitive Benutzeroberfläche und rollenbasierte Zugriffskontrolle für verschiedene Benutzertypen.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🎯 Zielgruppe
+- Beratungsunternehmen
+- Freiberufliche Berater
+- Coaching-Praxen
+- Therapiepraxen
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Aktuelle Features
 
-## Learning Laravel
+### ✅ Implementiert (v1.0)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### Authentifizierung & Benutzerverwaltung
+- [x] Rollenbasierte Authentifizierung (Admin, Berater, Standard-Benutzer)
+- [x] Sichere Anmeldung mit Laravel Breeze
+- [x] Benutzerprofile und -verwaltung
+- [x] Passwort-Reset-Funktionalität
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### Klientenverwaltung
+- [x] Vollständige CRUD-Operationen für Klienten
+- [x] Erweiterte Suchfunktionen
+- [x] Filteroptionen nach Status, Datum, etc.
+- [x] Klientendetailansichten
+- [x] Kontaktinformationen und Notizen
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Sitzungsverwaltung
+- [x] Terminplanung und -verwaltung
+- [x] Sitzungsstatus-Tracking
+- [x] Verknüpfung mit Klienten
+- [x] Zeiterfassung für Sitzungen
 
-## Laravel Sponsors
+#### Dashboard & Übersichten
+- [x] Interaktives Dashboard mit Statistiken
+- [x] Übersicht über anstehende Termine
+- [x] Schnellzugriff auf wichtige Funktionen
+- [x] Responsive Design für alle Geräte
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### Kalender
+- [x] Monatsansicht aller Termine
+- [x] Kalenderintegration
+- [x] Terminübersicht
 
-### Premium Partners
+#### Technische Basis
+- [x] Laravel 12 Framework
+- [x] SQLite/MySQL/PostgreSQL Unterstützung
+- [x] Tailwind CSS für modernes Design
+- [x] Alpine.js für interaktive Komponenten
+- [x] Vite für Asset-Bundling
+- [x] Responsive Design
+- [x] Datenbank-Seeding mit Testdaten
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛣️ Improvement Roadmap
 
-## Contributing
+### 📅 Phase 1: Dokumentenverwaltung (Q1 2025)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 🎯 Ziele
+- Vollständige Dokumentenverwaltung implementieren
+- Sichere Datei-Uploads ermöglichen
+- Dokumentenorganisation verbessern
 
-## Code of Conduct
+#### 📋 Features
+- [ ] **Datei-Upload-System**
+  - Drag & Drop Interface
+  - Unterstützung für PDF, DOC, DOCX, JPG, PNG
+  - Maximale Dateigröße: 10MB
+  - Virus-Scanning Integration
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- [ ] **Dokumentenorganisation**
+  - Ordnerstruktur pro Klient
+  - Dokumentenkategorien (Verträge, Berichte, Korrespondenz)
+  - Versionsverwaltung für Dokumente
+  - Dokumenten-Tags und Metadaten
 
-## Security Vulnerabilities
+- [ ] **Dokumentenvorschau**
+  - PDF-Viewer Integration
+  - Bildvorschau
+  - Dokumenten-Thumbnails
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- [ ] **Zugriffskontrolle**
+  - Rollenbasierte Dokumentenzugriffe
+  - Freigabe-Workflows
+  - Audit-Log für Dokumentenzugriffe
 
-## License
+#### 🔧 Technische Implementierung
+- Laravel Storage mit S3-Kompatibilität
+- Intervention Image für Bildverarbeitung
+- PDF-Viewer (PDF.js Integration)
+- File-Upload-Validierung und -Sicherheit
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### 📅 Phase 2: Erweiterte Sitzungsfunktionen (Q2 2025)
+
+#### 🎯 Ziele
+- Sitzungsnotizen-System implementieren
+- Bessere Sitzungsdokumentation
+- Fortschrittsverfolgung für Klienten
+
+#### 📋 Features
+- [ ] **Sitzungsnotizen-Editor**
+  - Rich-Text-Editor (TinyMCE/Quill)
+  - Vorlagen für verschiedene Sitzungstypen
+  - Automatische Speicherung
+  - Notizen-Versionierung
+
+- [ ] **Sitzungsvorlagen**
+  - Vordefinierte Sitzungsstrukturen
+  - Checklisten für Sitzungen
+  - Standardfragen und -themen
+  - Anpassbare Vorlagen pro Berater
+
+- [ ] **Fortschrittsverfolgung**
+  - Zielsetzung und -verfolgung
+  - Meilenstein-Tracking
+  - Fortschrittsberichte
+  - Grafische Darstellung des Fortschritts
+
+- [ ] **Sitzungsanalyse**
+  - Sitzungsdauer-Statistiken
+  - Häufigkeitsanalysen
+  - Erfolgsmetriken
+  - Berater-Performance-Übersichten
+
+#### 🔧 Technische Implementierung
+- Rich-Text-Editor Integration
+- Chart.js für Fortschrittsvisualisierung
+- Template-Engine für Sitzungsvorlagen
+- Erweiterte Datenbankstrukturen
+
+---
+
+### 📅 Phase 3: Kommunikation & Benachrichtigungen (Q3 2025)
+
+#### 🎯 Ziele
+- Automatisierte E-Mail-Benachrichtigungen
+- Interne Kommunikationstools
+- Erinnerungssystem implementieren
+
+#### 📋 Features
+- [ ] **E-Mail-Benachrichtigungen**
+  - Terminbestätigungen
+  - Erinnerungen (24h, 1h vor Termin)
+  - Absage-Benachrichtigungen
+  - Anpassbare E-Mail-Vorlagen
+
+- [ ] **SMS-Integration** (Optional)
+  - SMS-Erinnerungen
+  - Terminbestätigungen per SMS
+  - Integration mit SMS-Providern
+
+- [ ] **Interne Nachrichten**
+  - Nachrichten zwischen Beratern
+  - Klienten-bezogene Notizen teilen
+  - Team-Kommunikation
+  - Benachrichtigungszentrale
+
+- [ ] **Automatisierte Workflows**
+  - Regel-basierte Benachrichtigungen
+  - Follow-up-Erinnerungen
+  - Eskalationsprozesse
+  - Workflow-Designer
+
+#### 🔧 Technische Implementierung
+- Laravel Mail mit Queue-System
+- SMS-Provider Integration (Twilio/Nexmo)
+- Real-time Notifications (Pusher/WebSockets)
+- Job-Scheduling für automatisierte Tasks
+
+---
+
+### 📅 Phase 4: Berichte & Analytics (Q4 2025)
+
+#### 🎯 Ziele
+- Umfassende Berichtsfunktionen
+- Business Intelligence Features
+- Datenexport-Möglichkeiten
+
+#### 📋 Features
+- [ ] **Standard-Berichte**
+  - Klienten-Übersichtsberichte
+  - Sitzungsstatistiken
+  - Umsatzberichte
+  - Berater-Performance-Berichte
+
+- [ ] **Custom-Berichte**
+  - Berichts-Builder Interface
+  - Filterbare Datensätze
+  - Anpassbare Zeiträume
+  - Grafische Darstellungen
+
+- [ ] **Datenexport**
+  - PDF-Export für Berichte
+  - Excel/CSV-Export
+  - Automatisierte Berichtsversendung
+  - API für externe Systeme
+
+- [ ] **Dashboard-Erweiterungen**
+  - Anpassbare Widgets
+  - KPI-Tracking
+  - Trend-Analysen
+  - Vergleichsdarstellungen
+
+#### 🔧 Technische Implementierung
+- Laravel Excel für Datenexport
+- Chart.js/D3.js für Visualisierungen
+- PDF-Generation (DomPDF/wkhtmltopdf)
+- Caching für Performance-Optimierung
+
+---
+
+### 📅 Phase 5: API & Integrationen (Q1 2026)
+
+#### 🎯 Ziele
+- RESTful API entwickeln
+- Drittanbieter-Integrationen
+- Mobile App Vorbereitung
+
+#### 📋 Features
+- [ ] **RESTful API**
+  - Vollständige CRUD-API für alle Entitäten
+  - API-Authentifizierung (Sanctum)
+  - Rate Limiting
+  - API-Dokumentation (Swagger)
+
+- [ ] **Kalender-Integrationen**
+  - Google Calendar Sync
+  - Outlook Integration
+  - iCal Export/Import
+  - Zwei-Wege-Synchronisation
+
+- [ ] **Buchhaltungs-Integration**
+  - DATEV-Schnittstelle
+  - Rechnungserstellung
+  - Zahlungsverfolgung
+  - Steuerrelevante Berichte
+
+- [ ] **CRM-Integrationen**
+  - Salesforce Connector
+  - HubSpot Integration
+  - Mailchimp Sync
+  - Zapier Webhooks
+
+#### 🔧 Technische Implementierung
+- Laravel Sanctum für API-Auth
+- OAuth2 für Drittanbieter-APIs
+- Webhook-System
+- API-Versionierung
+
+---
+
+### 📅 Phase 6: Mobile & Advanced Features (Q2 2026)
+
+#### 🎯 Ziele
+- Mobile Responsivität verbessern
+- Progressive Web App Features
+- Erweiterte Sicherheitsfeatures
+
+#### 📋 Features
+- [ ] **Progressive Web App (PWA)**
+  - Offline-Funktionalität
+  - Push-Benachrichtigungen
+  - App-Installation
+  - Service Worker Implementation
+
+- [ ] **Erweiterte Sicherheit**
+  - Zwei-Faktor-Authentifizierung (2FA)
+  - Single Sign-On (SSO)
+  - Audit-Logs
+  - GDPR-Compliance Tools
+
+- [ ] **Performance-Optimierungen**
+  - Caching-Strategien
+  - Database-Optimierung
+  - CDN-Integration
+  - Lazy Loading
+
+- [ ] **Backup & Recovery**
+  - Automatisierte Backups
+  - Disaster Recovery Plan
+  - Datenarchivierung
+  - Compliance-Berichte
+
+#### 🔧 Technische Implementierung
+- PWA-Manifest und Service Workers
+- Laravel Fortify für erweiterte Auth
+- Redis für Caching
+- Automated Testing Suite
+
+---
+
+## 🏗️ Technische Architektur
+
+### Backend
+- **Framework**: Laravel 12
+- **PHP Version**: 8.2+
+- **Datenbank**: SQLite/MySQL/PostgreSQL
+- **Authentifizierung**: Laravel Breeze
+- **Queue System**: Database/Redis
+- **Caching**: File/Redis/Memcached
+
+### Frontend
+- **CSS Framework**: Tailwind CSS 4.x
+- **JavaScript**: Alpine.js 3.x
+- **Build Tool**: Vite 6.x
+- **Icons**: Heroicons
+- **Forms**: @tailwindcss/forms
+
+### DevOps & Deployment
+- **Containerization**: Docker (geplant)
+- **CI/CD**: GitHub Actions (geplant)
+- **Monitoring**: Laravel Telescope
+- **Testing**: PHPUnit, Pest (geplant)
+
+## 📊 Metriken & KPIs
+
+### Entwicklungsmetriken
+- **Code Coverage**: Ziel 80%+
+- **Performance**: < 200ms Antwortzeit
+- **Uptime**: 99.9% Verfügbarkeit
+- **Security**: Regelmäßige Penetrationstests
+
+### Business Metriken
+- **User Adoption**: Monatliche aktive Nutzer
+- **Feature Usage**: Nutzungsstatistiken pro Feature
+- **Support Tickets**: Reduzierung um 50%
+- **User Satisfaction**: NPS Score > 8
+
+## 🤝 Beitragen
+
+### Entwicklungsrichtlinien
+1. **Code Standards**: PSR-12 Coding Standards
+2. **Testing**: Alle neuen Features benötigen Tests
+3. **Documentation**: Inline-Dokumentation erforderlich
+4. **Security**: Security-Review für alle PRs
+
+### Git Workflow
+1. Feature Branches von `develop`
+2. Pull Requests mit Code Review
+3. Automated Testing vor Merge
+4. Semantic Versioning
+
+## 📞 Support & Kontakt
+
+### Entwicklungsteam
+- **Lead Developer**: [Name]
+- **Backend Developer**: [Name]
+- **Frontend Developer**: [Name]
+- **QA Engineer**: [Name]
+
+### Support-Kanäle
+- **Bug Reports**: GitHub Issues
+- **Feature Requests**: GitHub Discussions
+- **Documentation**: Wiki
+- **Emergency**: [Kontakt]
+
+## 📄 Lizenz
+
+Dieses Projekt ist für den internen Gebrauch entwickelt und unterliegt den Unternehmensrichtlinien.
+
+---
+
+**Version**: 1.0.0  
+**Letztes Update**: 26. Juni 2025  
+**Nächstes Review**: 26. September 2025

@@ -1,239 +1,197 @@
-@extends('layouts.app')
+@extends('layouts.crm')
 
-@section('title', 'Dashboard - Beratungs-CRM')
-@section('page-title', 'Dashboard')
+@section('title', 'Dashboard')
+@section('header', 'Dashboard')
 
 @section('content')
-<div class="row">
-    <!-- Statistik-Karten -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <div class="stat-number">{{ $stats['total_clients'] }}</div>
-                        <div class="text-white-50">Aktive Klienten</div>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-users fa-2x opacity-75"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <div class="stat-number">{{ $stats['sessions_today'] }}</div>
-                        <div class="text-white-50">Termine heute</div>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-calendar-day fa-2x opacity-75"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <div class="stat-number">{{ $stats['sessions_this_week'] }}</div>
-                        <div class="text-white-50">Diese Woche</div>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-calendar-week fa-2x opacity-75"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card stat-card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <div class="stat-number">{{ $stats['sessions_this_month'] }}</div>
-                        <div class="text-white-50">Dieser Monat</div>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-calendar-alt fa-2x opacity-75"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Heutige Termine -->
-    <div class="col-lg-8 mb-4">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="fas fa-calendar-day text-primary me-2"></i>
-                    Heutige Termine
-                </h5>
-                <a href="{{ route('sessions.create') }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-plus"></i> Neuer Termin
-                </a>
-            </div>
-            <div class="card-body">
-                @if($todaysSessions->count() > 0)
-                    <div class="list-group list-group-flush">
-                        @foreach($todaysSessions as $session)
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">{{ $session->title }}</h6>
-                                    <p class="mb-1">
-                                        <i class="fas fa-user text-muted me-1"></i>
-                                        {{ $session->client->full_name }}
-                                    </p>
-                                    <small class="text-muted">
-                                        <i class="fas fa-clock me-1"></i>
-                                        {{ $session->scheduled_at->format('H:i') }} - 
-                                        {{ $session->end_time->format('H:i') }}
-                                        @if($session->location)
-                                            | <i class="fas fa-map-marker-alt me-1"></i>{{ $session->location }}
-                                        @endif
-                                    </small>
-                                </div>
-                                <div>
-                                    <span class="badge bg-{{ $session->status === 'scheduled' ? 'primary' : ($session->status === 'completed' ? 'success' : 'warning') }}">
-                                        {{ ucfirst($session->status) }}
-                                    </span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Keine Termine für heute geplant.</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <!-- Neueste Klienten -->
-    <div class="col-lg-4 mb-4">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="fas fa-user-plus text-success me-2"></i>
-                    Neueste Klienten
-                </h5>
-                <a href="{{ route('clients.create') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Neuer Klient
-                </a>
-            </div>
-            <div class="card-body">
-                @if($recentClients->count() > 0)
-                    <div class="list-group list-group-flush">
-                        @foreach($recentClients as $client)
-                            <a href="{{ route('clients.show', $client) }}" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">{{ $client->full_name }}</h6>
-                                    <small>{{ $client->created_at->diffForHumans() }}</small>
-                                </div>
-                                <p class="mb-1">
-                                    <small class="text-muted">{{ $client->client_number }}</small>
-                                </p>
-                                @if($client->email)
-                                    <small class="text-muted">
-                                        <i class="fas fa-envelope me-1"></i>{{ $client->email }}
-                                    </small>
-                                @endif
-                            </a>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Noch keine Klienten angelegt.</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Kommende Termine -->
+<!-- Willkommensnachricht -->
+<div class="row mb-4">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-calendar-plus text-info me-2"></i>
-                    Kommende Termine (nächste 7 Tage)
-                </h5>
-            </div>
+        <div class="alert alert-primary">
+            <h4 class="alert-heading">
+                <i class="bi bi-person-circle me-2"></i>Willkommen, {{ auth()->user()->name }}!
+            </h4>
+            <p class="mb-0">
+                Sie sind als <strong>{{ auth()->user()->role_display }}</strong> angemeldet. 
+                Hier ist eine Übersicht über Ihre wichtigsten Daten.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Statistiken -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white">
             <div class="card-body">
-                @if($upcomingSessions->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Datum & Zeit</th>
-                                    <th>Klient</th>
-                                    <th>Titel</th>
-                                    <th>Typ</th>
-                                    <th>Status</th>
-                                    <th>Aktionen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($upcomingSessions as $session)
-                                    <tr>
-                                        <td>
-                                            <strong>{{ $session->scheduled_at->format('d.m.Y') }}</strong><br>
-                                            <small class="text-muted">{{ $session->scheduled_at->format('H:i') }} - {{ $session->end_time->format('H:i') }}</small>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('clients.show', $session->client) }}" class="text-decoration-none">
-                                                {{ $session->client->full_name }}
-                                            </a>
-                                        </td>
-                                        <td>{{ $session->title }}</td>
-                                        <td>
-                                            <span class="badge bg-secondary">{{ ucfirst($session->session_type) }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{{ $session->status === 'scheduled' ? 'primary' : ($session->status === 'completed' ? 'success' : 'warning') }}">
-                                                {{ ucfirst($session->status) }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('sessions.show', $session) }}" class="btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('sessions.edit', $session) }}" class="btn btn-sm btn-outline-secondary">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_clients'] }}</h4>
+                        <p class="card-text">Klienten gesamt</p>
                     </div>
-                @else
-                    <div class="text-center py-4">
-                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">Keine kommenden Termine in den nächsten 7 Tagen.</p>
-                        <a href="{{ route('sessions.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Ersten Termin erstellen
-                        </a>
+                    <div class="align-self-center">
+                        <i class="bi bi-people fs-1"></i>
                     </div>
-                @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['total_sessions'] }}</h4>
+                        <p class="card-text">Sitzungen gesamt</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-calendar-event fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['sessions_this_month'] }}</h4>
+                        <p class="card-text">Sitzungen diesen Monat</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-calendar-check fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ $stats['upcoming_sessions'] }}</h4>
+                        <p class="card-text">Kommende Sitzungen</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="bi bi-clock fs-1"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="row">
+    <!-- Neueste Klienten -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-person-plus me-2"></i>Neueste Klienten
+                </h5>
+                @if(auth()->user()->canManageClients())
+                    <a href="{{ route('clients.index') }}" class="btn btn-sm btn-outline-primary">
+                        Alle anzeigen
+                    </a>
+                @endif
+            </div>
+            <div class="card-body">
+                @forelse($stats['recent_clients'] as $client)
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <strong>{{ $client->first_name }} {{ $client->last_name }}</strong><br>
+                            <small class="text-muted">{{ $client->email }}</small>
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted">{{ $client->created_at->diffForHumans() }}</small>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted">Keine Klienten gefunden.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Kommende Sitzungen -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-calendar-event me-2"></i>Kommende Sitzungen
+                </h5>
+                @if(auth()->user()->canManageSessions())
+                    <a href="{{ route('sessions.index') }}" class="btn btn-sm btn-outline-primary">
+                        Alle anzeigen
+                    </a>
+                @endif
+            </div>
+            <div class="card-body">
+                @forelse($stats['upcoming_sessions_list'] as $session)
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <strong>{{ $session->title }}</strong><br>
+                            <small class="text-muted">
+                                mit {{ $session->client->first_name }} {{ $session->client->last_name }}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-{{ $session->status === 'scheduled' ? 'primary' : 'secondary' }}">
+                                {{ $session->scheduled_at->format('d.m. H:i') }}
+                            </span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted">Keine kommenden Sitzungen.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schnellaktionen -->
+@if(auth()->user()->canManageClients())
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-lightning me-2"></i>Schnellaktionen
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('clients.create') }}" class="btn btn-primary w-100">
+                                <i class="bi bi-person-plus me-2"></i>Neuer Klient
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('sessions.create') }}" class="btn btn-success w-100">
+                                <i class="bi bi-calendar-plus me-2"></i>Neue Sitzung
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('calendar.index') }}" class="btn btn-info w-100">
+                                <i class="bi bi-calendar3 me-2"></i>Kalender
+                            </a>
+                        </div>
+                        @if(auth()->user()->isAdmin())
+                            <div class="col-md-3 mb-3">
+                                <a href="{{ route('admin.dashboard') }}" class="btn btn-warning w-100">
+                                    <i class="bi bi-gear me-2"></i>Administration
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 @endsection
