@@ -1,10 +1,11 @@
 <?php
 
 use App\Models\User;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
+
 use function Pest\Laravel\assertAuthenticated;
 use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
 test('login screen can be rendered', function () {
     get('/login')->assertStatus(200);

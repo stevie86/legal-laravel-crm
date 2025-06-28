@@ -53,6 +53,7 @@ class CreateSuperAdmin extends Command
             foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return 1; // Error exit code
         }
 

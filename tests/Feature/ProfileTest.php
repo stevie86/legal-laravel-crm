@@ -1,14 +1,11 @@
 <?php
 
 use App\Models\User;
+use function PHPUnit\Framework\assertNull;
+use function PHPUnit\Framework\assertNotNull;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertGuest;
-use function Pest\Laravel\assertNotNull;
-use function Pest\Laravel\assertNull;
-use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
-use function Pest\Laravel\patch;
-
 
 test('profile page is displayed', function () {
     $user = User::factory()->create();

@@ -27,7 +27,7 @@ class CheckRole
             return redirect()->route('login')->with('error', 'Ihr Account ist deaktiviert.');
         }
 
-        if (! empty($roles) && ! in_array($user->role, $roles)) {
+        if (! empty($roles) && ! $user->hasAnyRole($roles)) {
             abort(403, 'Sie haben keine Berechtigung für diese Aktion.');
         }
 

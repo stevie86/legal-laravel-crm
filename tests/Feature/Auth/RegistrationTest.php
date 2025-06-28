@@ -1,8 +1,8 @@
 <?php
 
+use function Pest\Laravel\assertAuthenticated;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
-use function Pest\Laravel\assertAuthenticated;
 
 test('registration screen can be rendered', function () {
     get('/register')->assertStatus(200);

@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Call the UserSeeder to create the Admin and Counselor roles and users.
         $this->call([
+            RolePermissionSeeder::class,
             UserSeeder::class,
         ]);
 
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($clients as $clientData) {
-            $client = Client::create($clientData);
+            $client = Client::firstOrCreate(['email' => $clientData['email']], $clientData);
 
             // Erstelle einige Beratungssitzungen für jeden Klienten
             $sessions = [

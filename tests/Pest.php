@@ -31,6 +31,11 @@ expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
+use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\assertAuthenticated;
+use function Pest\Laravel\assertNull;
+use function Pest\Laravel\assertNotNull;
+
 /*
 |--------------------------------------------------------------------------
 | Functions
@@ -42,6 +47,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something() {
+function something()
+{
     // ..
 }

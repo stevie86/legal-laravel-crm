@@ -35,14 +35,16 @@
                             </a>
                         </li>
                         
-                        @if(auth()->user()->canManageClients())
+                        @if(auth()->user()->can('manage clients'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('clients.*') ? 'active' : '' }}" 
                                    href="{{ route('clients.index') }}">
                                     <i class="bi bi-people me-1"></i>Klienten
                                 </a>
                             </li>
-                            
+                        @endif
+                        
+                        @if(auth()->user()->can('manage sessions'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('sessions.*') ? 'active' : '' }}" 
                                    href="{{ route('sessions.index') }}">
@@ -58,7 +60,7 @@
                             </a>
                         </li>
                         
-                        @if(auth()->user()->canManageClients())
+                        @if(auth()->user()->can('manage clients'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('documents.*') ? 'active' : '' }}" 
                                    href="{{ route('documents.index') }}">
@@ -67,7 +69,7 @@
                             </li>
                         @endif
                         
-                        @if(auth()->user()->isAdmin())
+                        @if(auth()->user()->hasRole('Admin'))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.*') ? 'active' : '' }}" 
                                    href="#" role="button" data-bs-toggle="dropdown">
@@ -97,7 +99,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name }}
-                                <span class="badge bg-secondary ms-1">{{ auth()->user()->role_display }}</span>
+                                <span class="badge bg-secondary ms-1">{{ auth()->user()->getRoleNames()->first() }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">
@@ -189,7 +191,7 @@
                     <p class="text-muted mb-0">
                         Version 1.0 | 
                         @auth
-                            Angemeldet als: {{ auth()->user()->name }} ({{ auth()->user()->role_display }})
+                            Angemeldet als: {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()->first() }})
                         @endauth
                     </p>
                 </div>

@@ -1,9 +1,8 @@
 <?php
 
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
 
 test('confirm password screen can be rendered', function () {
     $user = User::factory()->create();

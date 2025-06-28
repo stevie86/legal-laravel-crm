@@ -16,22 +16,22 @@ class DashboardController extends Controller
 
         // Basis-Statistiken basierend auf Berechtigungen
         $stats = [
-            'total_clients' => $user->canManageClients() ? Client::count() : 0,
-            'total_sessions' => $user->canManageSessions() ? CounselingSession::count() : 0,
-            'sessions_this_month' => $user->canManageSessions() ?
+            'total_clients' => $user->can('manage clients') ? Client::count() : 0,
+            'total_sessions' => $user->can('manage sessions') ? CounselingSession::count() : 0,
+            'sessions_this_month' => $user->can('manage sessions') ?
                 CounselingSession::whereMonth('scheduled_at', now()->month)->count() : 0,
-            'upcoming_sessions' => $user->canManageSessions() ?
+            'upcoming_sessions' => $user->can('manage sessions') ?
                 CounselingSession::where('scheduled_at', '>', now())->count() : 0,
         ];
 
         // Detaillierte Daten nur für berechtigte Benutzer
-        if ($user->canManageClients()) {
+        if ($user->can('manage clients')) {
             $stats['recent_clients'] = Client::latest()->take(5)->get();
         } else {
             $stats['recent_clients'] = collect();
         }
 
-        if ($user->canManageSessions()) {
+        if ($user->can('manage sessions')) {
             $stats['upcoming_sessions_list'] = CounselingSession::with('client')
                 ->where('scheduled_at', '>', now())
                 ->orderBy('scheduled_at')

@@ -12,7 +12,7 @@
                 <i class="bi bi-person-circle me-2"></i>Willkommen, {{ auth()->user()->name }}!
             </h4>
             <p class="mb-0">
-                Sie sind als <strong>{{ auth()->user()->role_display }}</strong> angemeldet. 
+                Sie sind als <strong>{{ auth()->user()->getRoleNames()->first() }}</strong> angemeldet. 
                 Hier ist eine Übersicht über Ihre wichtigsten Daten.
             </p>
         </div>
@@ -94,7 +94,7 @@
                 <h5 class="card-title mb-0">
                     <i class="bi bi-person-plus me-2"></i>Neueste Klienten
                 </h5>
-                @if(auth()->user()->canManageClients())
+                @if(auth()->user()->can('manage clients'))
                     <a href="{{ route('clients.index') }}" class="btn btn-sm btn-outline-primary">
                         Alle anzeigen
                     </a>
@@ -125,7 +125,7 @@
                 <h5 class="card-title mb-0">
                     <i class="bi bi-calendar-event me-2"></i>Kommende Sitzungen
                 </h5>
-                @if(auth()->user()->canManageSessions())
+                @if(auth()->user()->can('manage sessions'))
                     <a href="{{ route('sessions.index') }}" class="btn btn-sm btn-outline-primary">
                         Alle anzeigen
                     </a>
@@ -155,7 +155,7 @@
 </div>
 
 <!-- Schnellaktionen -->
-@if(auth()->user()->canManageClients())
+@if(auth()->user()->can('manage clients'))
     <div class="row">
         <div class="col-12">
             <div class="card">

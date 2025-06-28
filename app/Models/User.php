@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'is_active',
         'last_login_at',
     ];
@@ -52,51 +51,7 @@ class User extends Authenticatable
         ];
     }
 
-    // Berechtigungsmethoden
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isCounselor(): bool
-    {
-        return $this->role === 'counselor';
-    }
-
-    public function isViewer(): bool
-    {
-        return $this->role === 'viewer';
-    }
-
-    public function canManageUsers(): bool
-    {
-        return $this->isAdmin();
-    }
-
-    public function canManageClients(): bool
-    {
-        return $this->isAdmin() || $this->isCounselor();
-    }
-
-    public function canManageSessions(): bool
-    {
-        return $this->isAdmin() || $this->isCounselor();
-    }
-
-    public function canViewReports(): bool
-    {
-        return $this->isAdmin() || $this->isCounselor();
-    }
-
-    public function getRoleDisplayAttribute(): string
-    {
-        return match ($this->role) {
-            'admin' => 'Administrator',
-            'counselor' => 'Berater',
-            'viewer' => 'Betrachter',
-            default => 'Unbekannt'
-        };
-    }
+    
 
     // Beziehungen
     public function counselingSessions()
