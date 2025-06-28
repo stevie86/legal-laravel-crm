@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\CounselingSession;
-use App\Models\CalendarEvent;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -20,9 +18,9 @@ class DashboardController extends Controller
         $stats = [
             'total_clients' => $user->canManageClients() ? Client::count() : 0,
             'total_sessions' => $user->canManageSessions() ? CounselingSession::count() : 0,
-            'sessions_this_month' => $user->canManageSessions() ? 
+            'sessions_this_month' => $user->canManageSessions() ?
                 CounselingSession::whereMonth('scheduled_at', now()->month)->count() : 0,
-            'upcoming_sessions' => $user->canManageSessions() ? 
+            'upcoming_sessions' => $user->canManageSessions() ?
                 CounselingSession::where('scheduled_at', '>', now())->count() : 0,
         ];
 

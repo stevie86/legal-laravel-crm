@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\CalendarEvent;
-use App\Models\CounselingSession;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
@@ -13,18 +12,18 @@ class CalendarController extends Controller
     {
         $currentMonth = $request->get('month', Carbon::now()->format('Y-m'));
         $date = Carbon::createFromFormat('Y-m', $currentMonth)->startOfMonth();
-        
+
         // Hole alle Events für den aktuellen Monat
         $events = CalendarEvent::with(['client', 'counselingSession'])
             ->whereBetween('start_time', [
                 $date->copy()->startOfMonth(),
-                $date->copy()->endOfMonth()
+                $date->copy()->endOfMonth(),
             ])
             ->orderBy('start_time')
             ->get();
 
         // Gruppiere Events nach Datum
-        $eventsByDate = $events->groupBy(function($event) {
+        $eventsByDate = $events->groupBy(function ($event) {
             return $event->start_time->format('Y-m-d');
         });
 
@@ -39,27 +38,27 @@ class CalendarController extends Controller
         $calendar = [];
         $startOfMonth = $date->copy()->startOfMonth();
         $endOfMonth = $date->copy()->endOfMonth();
-        
+
         // Starte mit dem ersten Montag vor oder am ersten Tag des Monats
         $current = $startOfMonth->copy()->startOfWeek(Carbon::MONDAY);
-        
+
         // Erstelle 6 Wochen (42 Tage)
         for ($week = 0; $week < 6; $week++) {
             $calendar[$week] = [];
             for ($day = 0; $day < 7; $day++) {
                 $dayEvents = $eventsByDate->get($current->format('Y-m-d'), collect());
-                
+
                 $calendar[$week][$day] = [
                     'date' => $current->copy(),
                     'isCurrentMonth' => $current->month === $date->month,
                     'isToday' => $current->isToday(),
-                    'events' => $dayEvents
+                    'events' => $dayEvents,
                 ];
-                
+
                 $current->addDay();
             }
         }
-        
+
         return $calendar;
     }
 
@@ -67,11 +66,11 @@ class CalendarController extends Controller
     {
         $start = $request->get('start');
         $end = $request->get('end');
-        
+
         $events = CalendarEvent::with(['client', 'counselingSession'])
             ->whereBetween('start_time', [$start, $end])
             ->get()
-            ->map(function($event) {
+            ->map(function ($event) {
                 return [
                     'id' => $event->id,
                     'title' => $event->title,
@@ -79,9 +78,9 @@ class CalendarController extends Controller
                     'end' => $event->end_time->toISOString(),
                     'backgroundColor' => $event->color,
                     'borderColor' => $event->color,
-                    'url' => $event->counseling_session_id 
+                    'url' => $event->counseling_session_id
                         ? route('sessions.show', $event->counseling_session_id)
-                        : null
+                        : null,
                 ];
             });
 

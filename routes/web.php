@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CounselingSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +15,7 @@ Route::get('/', function () {
 
 // Authentifizierte Routen
 Route::middleware(['auth', 'verified'])->group(function () {
-    
+
     // Dashboard - für alle authentifizierten Benutzer
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -41,7 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin-Bereich - nur für Administratoren
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-        
+
         // Benutzerverwaltung
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
@@ -49,10 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
         Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
         Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.destroy');
-        
+
         // System-Einstellungen
         Route::get('/settings', [AdminController::class, 'systemSettings'])->name('settings');
-        
+
         // Berichte
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
     });

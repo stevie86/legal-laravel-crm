@@ -1,306 +1,172 @@
-# Beratungs-CRM
+# Legal Laravel CRM
 
-Ein modernes Customer Relationship Management System speziell für Beratungsunternehmen, entwickelt mit Laravel 12 und modernen Web-Technologien.
+A modern Customer Relationship Management system specifically for law firms and consultants, developed with Laravel and modern web technologies.
 
-## 📋 Projektübersicht
+## 📋 Project Overview
 
-Das Beratungs-CRM ist eine umfassende Lösung zur Verwaltung von Klienten, Beratungssitzungen und Dokumenten. Es bietet eine intuitive Benutzeroberfläche und rollenbasierte Zugriffskontrolle für verschiedene Benutzertypen.
+The Legal CRM is a comprehensive solution for managing clients, counseling sessions, and documents. It offers an intuitive user interface and role-based access control for different user types.
 
-### 🎯 Zielgruppe
-- Beratungsunternehmen
-- Freiberufliche Berater
-- Coaching-Praxen
-- Therapiepraxen
+### 🎯 Target Audience
+- Law Firms
+- Consultants
+- Coaching Practices
+- Therapy Practices
 
-## 🚀 Aktuelle Features
+## 🚀 Features
 
-### ✅ Implementiert (v1.0)
+### ✅ Implemented (v1.0)
 
-#### Authentifizierung & Benutzerverwaltung
-- [x] Rollenbasierte Authentifizierung (Admin, Berater, Standard-Benutzer)
-- [x] Sichere Anmeldung mit Laravel Breeze
-- [x] Benutzerprofile und -verwaltung
-- [x] Passwort-Reset-Funktionalität
+#### Authentication & User Management
+- [x] Role-based authentication (Admin, Counselor, User)
+- [x] Secure login with Laravel Breeze
+- [x] User profiles and management
+- [x] Password reset functionality
 
-#### Klientenverwaltung
-- [x] Vollständige CRUD-Operationen für Klienten
-- [x] Erweiterte Suchfunktionen
-- [x] Filteroptionen nach Status, Datum, etc.
-- [x] Klientendetailansichten
-- [x] Kontaktinformationen und Notizen
+#### Client Management
+- [x] Full CRUD operations for clients
+- [x] Advanced search functions
+- [x] Filtering options by status, date, etc.
+- [x] Client detail views
+- [x] Contact information and notes
 
-#### Sitzungsverwaltung
-- [x] Terminplanung und -verwaltung
-- [x] Sitzungsstatus-Tracking
-- [x] Verknüpfung mit Klienten
-- [x] Zeiterfassung für Sitzungen
+#### Session Management
+- [x] Appointment scheduling and management
+- [x] Session status tracking
+- [x] Linking with clients
+- [x] Time tracking for sessions
 
-#### Dashboard & Übersichten
-- [x] Interaktives Dashboard mit Statistiken
-- [x] Übersicht über anstehende Termine
-- [x] Schnellzugriff auf wichtige Funktionen
-- [x] Responsive Design für alle Geräte
+#### Dashboard & Overviews
+- [x] Interactive dashboard with statistics
+- [x] Overview of upcoming appointments
+- [x] Quick access to important functions
+- [x] Responsive design for all devices
 
-#### Kalender
-- [x] Monatsansicht aller Termine
-- [x] Kalenderintegration
-- [x] Terminübersicht
+#### Calendar
+- [x] Monthly view of all appointments
+- [x] Calendar integration
+- [x] Appointment overview
 
-#### Technische Basis
+#### Technical Basis
 - [x] Laravel 12 Framework
-- [x] SQLite/MySQL/PostgreSQL Unterstützung
-- [x] Tailwind CSS für modernes Design
-- [x] Alpine.js für interaktive Komponenten
-- [x] Vite für Asset-Bundling
-- [x] Responsive Design
-- [x] Datenbank-Seeding mit Testdaten
+- [x] SQLite/MySQL/PostgreSQL support
+- [x] Tailwind CSS for modern design
+- [x] Alpine.js for interactive components
+- [x] Vite for asset bundling
+- [x] Responsive design
+- [x] Database seeding with test data
 
-## 🛣️ Improvement Roadmap
+## 🚀 Getting Started
 
-### 📅 Phase 1: Dokumentenverwaltung (Q1 2025)
+This guide provides instructions for setting up the Legal Laravel CRM for both local development using Laravel Sail and for production deployment on Fly.io.
 
-#### 🎯 Ziele
-- Vollständige Dokumentenverwaltung implementieren
-- Sichere Datei-Uploads ermöglichen
-- Dokumentenorganisation verbessern
+### Local Development with Laravel Sail
 
-#### 📋 Features
-- [ ] **Datei-Upload-System**
-  - Drag & Drop Interface
-  - Unterstützung für PDF, DOC, DOCX, JPG, PNG
-  - Maximale Dateigröße: 10MB
-  - Virus-Scanning Integration
+#### Prerequisites
+- Docker Desktop
 
-- [ ] **Dokumentenorganisation**
-  - Ordnerstruktur pro Klient
-  - Dokumentenkategorien (Verträge, Berichte, Korrespondenz)
-  - Versionsverwaltung für Dokumente
-  - Dokumenten-Tags und Metadaten
+#### Steps
 
-- [ ] **Dokumentenvorschau**
-  - PDF-Viewer Integration
-  - Bildvorschau
-  - Dokumenten-Thumbnails
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/legal-laravel-crm.git
+    cd legal-laravel-crm
+    ```
 
-- [ ] **Zugriffskontrolle**
-  - Rollenbasierte Dokumentenzugriffe
-  - Freigabe-Workflows
-  - Audit-Log für Dokumentenzugriffe
+2.  **Create a `.env` file:**
+    ```bash
+    cp .env.example .env
+    ```
 
-#### 🔧 Technische Implementierung
-- Laravel Storage mit S3-Kompatibilität
-- Intervention Image für Bildverarbeitung
-- PDF-Viewer (PDF.js Integration)
-- File-Upload-Validierung und -Sicherheit
+3.  **Install Composer dependencies:**
+    ```bash
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php82-composer:latest \
+        composer install --ignore-platform-reqs
+    ```
 
----
+4.  **Start the Sail containers:**
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
 
-### 📅 Phase 2: Erweiterte Sitzungsfunktionen (Q2 2025)
+    💡 **Tip:** To run the application on a custom port, you can set the `APP_PORT` variable in your `.env` file. For example:
+    ```dotenv
+    APP_PORT=8080
+    APP_URL=http://localhost:8080
+    ```
+    After changing the port, you may need to restart the Sail containers: `./vendor/bin/sail down && ./vendor/bin/sail up -d`.
 
-#### 🎯 Ziele
-- Sitzungsnotizen-System implementieren
-- Bessere Sitzungsdokumentation
-- Fortschrittsverfolgung für Klienten
+5.  **Generate the application key:**
+    ```bash
+    ./vendor/bin/sail artisan key:generate
+    ```
 
-#### 📋 Features
-- [ ] **Sitzungsnotizen-Editor**
-  - Rich-Text-Editor (TinyMCE/Quill)
-  - Vorlagen für verschiedene Sitzungstypen
-  - Automatische Speicherung
-  - Notizen-Versionierung
+6.  **Run database migrations and seed the database:**
+    ```bash
+    ./vendor/bin/sail artisan migrate --seed
+    ```
 
-- [ ] **Sitzungsvorlagen**
-  - Vordefinierte Sitzungsstrukturen
-  - Checklisten für Sitzungen
-  - Standardfragen und -themen
-  - Anpassbare Vorlagen pro Berater
+7.  **Install NPM dependencies and build assets:**
+    ```bash
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev
+    ```
 
-- [ ] **Fortschrittsverfolgung**
-  - Zielsetzung und -verfolgung
-  - Meilenstein-Tracking
-  - Fortschrittsberichte
-  - Grafische Darstellung des Fortschritts
+Your application is now available at the URL specified by `APP_URL` in your `.env` file (by default: http://localhost).
 
-- [ ] **Sitzungsanalyse**
-  - Sitzungsdauer-Statistiken
-  - Häufigkeitsanalysen
-  - Erfolgsmetriken
-  - Berater-Performance-Übersichten
+#### Default Users
 
-#### 🔧 Technische Implementierung
-- Rich-Text-Editor Integration
-- Chart.js für Fortschrittsvisualisierung
-- Template-Engine für Sitzungsvorlagen
-- Erweiterte Datenbankstrukturen
+-   **Admin:** `admin@example.com` / `password`
+-   **Counselor:** `counselor@example.com` / `password`
 
----
+### Production Deployment with Fly.io
 
-### 📅 Phase 3: Kommunikation & Benachrichtigungen (Q3 2025)
+#### Prerequisites
 
-#### 🎯 Ziele
-- Automatisierte E-Mail-Benachrichtigungen
-- Interne Kommunikationstools
-- Erinnerungssystem implementieren
+-   Fly.io account
+-   `flyctl` CLI installed and authenticated
+-   A PostgreSQL database on Fly.io
 
-#### 📋 Features
-- [ ] **E-Mail-Benachrichtigungen**
-  - Terminbestätigungen
-  - Erinnerungen (24h, 1h vor Termin)
-  - Absage-Benachrichtigungen
-  - Anpassbare E-Mail-Vorlagen
+#### Steps
 
-- [ ] **SMS-Integration** (Optional)
-  - SMS-Erinnerungen
-  - Terminbestätigungen per SMS
-  - Integration mit SMS-Providern
+1.  **Launch the app on Fly.io:**
+    ```bash
+    flyctl launch
+    ```
+    This will create a `fly.toml` file and a `Dockerfile`.
 
-- [ ] **Interne Nachrichten**
-  - Nachrichten zwischen Beratern
-  - Klienten-bezogene Notizen teilen
-  - Team-Kommunikation
-  - Benachrichtigungszentrale
+2.  **Set the application key as a secret:**
+    ```bash
+    flyctl secrets set APP_KEY=$(php artisan key:generate --show)
+    ```
 
-- [ ] **Automatisierte Workflows**
-  - Regel-basierte Benachrichtigungen
-  - Follow-up-Erinnerungen
-  - Eskalationsprozesse
-  - Workflow-Designer
+3.  **Set the `DATABASE_URL` secret:**
+    Get your database connection string from the Fly.io dashboard and set it as a secret:
+    ```bash
+    flyctl secrets set DATABASE_URL="your-postgres-connection-string"
+    ```
 
-#### 🔧 Technische Implementierung
-- Laravel Mail mit Queue-System
-- SMS-Provider Integration (Twilio/Nexmo)
-- Real-time Notifications (Pusher/WebSockets)
-- Job-Scheduling für automatisierte Tasks
+4.  **Deploy the application:**
+    ```bash
+    flyctl deploy
+    ```
 
----
+5.  **Run database migrations:**
+    Connect to the production instance and run the migrations:
+    ```bash
+    flyctl ssh console -C "php artisan migrate --force"
+    ```
 
-### 📅 Phase 4: Berichte & Analytics (Q4 2025)
-
-#### 🎯 Ziele
-- Umfassende Berichtsfunktionen
-- Business Intelligence Features
-- Datenexport-Möglichkeiten
-
-#### 📋 Features
-- [ ] **Standard-Berichte**
-  - Klienten-Übersichtsberichte
-  - Sitzungsstatistiken
-  - Umsatzberichte
-  - Berater-Performance-Berichte
-
-- [ ] **Custom-Berichte**
-  - Berichts-Builder Interface
-  - Filterbare Datensätze
-  - Anpassbare Zeiträume
-  - Grafische Darstellungen
-
-- [ ] **Datenexport**
-  - PDF-Export für Berichte
-  - Excel/CSV-Export
-  - Automatisierte Berichtsversendung
-  - API für externe Systeme
-
-- [ ] **Dashboard-Erweiterungen**
-  - Anpassbare Widgets
-  - KPI-Tracking
-  - Trend-Analysen
-  - Vergleichsdarstellungen
-
-#### 🔧 Technische Implementierung
-- Laravel Excel für Datenexport
-- Chart.js/D3.js für Visualisierungen
-- PDF-Generation (DomPDF/wkhtmltopdf)
-- Caching für Performance-Optimierung
-
----
-
-### 📅 Phase 5: API & Integrationen (Q1 2026)
-
-#### 🎯 Ziele
-- RESTful API entwickeln
-- Drittanbieter-Integrationen
-- Mobile App Vorbereitung
-
-#### 📋 Features
-- [ ] **RESTful API**
-  - Vollständige CRUD-API für alle Entitäten
-  - API-Authentifizierung (Sanctum)
-  - Rate Limiting
-  - API-Dokumentation (Swagger)
-
-- [ ] **Kalender-Integrationen**
-  - Google Calendar Sync
-  - Outlook Integration
-  - iCal Export/Import
-  - Zwei-Wege-Synchronisation
-
-- [ ] **Buchhaltungs-Integration**
-  - DATEV-Schnittstelle
-  - Rechnungserstellung
-  - Zahlungsverfolgung
-  - Steuerrelevante Berichte
-
-- [ ] **CRM-Integrationen**
-  - Salesforce Connector
-  - HubSpot Integration
-  - Mailchimp Sync
-  - Zapier Webhooks
-
-#### 🔧 Technische Implementierung
-- Laravel Sanctum für API-Auth
-- OAuth2 für Drittanbieter-APIs
-- Webhook-System
-- API-Versionierung
-
----
-
-### 📅 Phase 6: Mobile & Advanced Features (Q2 2026)
-
-#### 🎯 Ziele
-- Mobile Responsivität verbessern
-- Progressive Web App Features
-- Erweiterte Sicherheitsfeatures
-
-#### 📋 Features
-- [ ] **Progressive Web App (PWA)**
-  - Offline-Funktionalität
-  - Push-Benachrichtigungen
-  - App-Installation
-  - Service Worker Implementation
-
-- [ ] **Erweiterte Sicherheit**
-  - Zwei-Faktor-Authentifizierung (2FA)
-  - Single Sign-On (SSO)
-  - Audit-Logs
-  - GDPR-Compliance Tools
-
-- [ ] **Performance-Optimierungen**
-  - Caching-Strategien
-  - Database-Optimierung
-  - CDN-Integration
-  - Lazy Loading
-
-- [ ] **Backup & Recovery**
-  - Automatisierte Backups
-  - Disaster Recovery Plan
-  - Datenarchivierung
-  - Compliance-Berichte
-
-#### 🔧 Technische Implementierung
-- PWA-Manifest und Service Workers
-- Laravel Fortify für erweiterte Auth
-- Redis für Caching
-- Automated Testing Suite
-
----
-
-## 🏗️ Technische Architektur
+## 🏗️ Technical Architecture
 
 ### Backend
 - **Framework**: Laravel 12
 - **PHP Version**: 8.2+
-- **Datenbank**: SQLite/MySQL/PostgreSQL
-- **Authentifizierung**: Laravel Breeze
+- **Database**: SQLite/MySQL/PostgreSQL
+- **Authentication**: Laravel Breeze
 - **Queue System**: Database/Redis
 - **Caching**: File/Redis/Memcached
 
@@ -312,59 +178,25 @@ Das Beratungs-CRM ist eine umfassende Lösung zur Verwaltung von Klienten, Berat
 - **Forms**: @tailwindcss/forms
 
 ### DevOps & Deployment
-- **Containerization**: Docker (geplant)
-- **CI/CD**: GitHub Actions (geplant)
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
 - **Monitoring**: Laravel Telescope
-- **Testing**: PHPUnit, Pest (geplant)
+-- **Testing**: PHPUnit, Pest
 
-## 📊 Metriken & KPIs
+## 🤝 Contributing
 
-### Entwicklungsmetriken
-- **Code Coverage**: Ziel 80%+
-- **Performance**: < 200ms Antwortzeit
-- **Uptime**: 99.9% Verfügbarkeit
-- **Security**: Regelmäßige Penetrationstests
-
-### Business Metriken
-- **User Adoption**: Monatliche aktive Nutzer
-- **Feature Usage**: Nutzungsstatistiken pro Feature
-- **Support Tickets**: Reduzierung um 50%
-- **User Satisfaction**: NPS Score > 8
-
-## 🤝 Beitragen
-
-### Entwicklungsrichtlinien
-1. **Code Standards**: PSR-12 Coding Standards
-2. **Testing**: Alle neuen Features benötigen Tests
-3. **Documentation**: Inline-Dokumentation erforderlich
-4. **Security**: Security-Review für alle PRs
+### Development Guidelines
+1.  **Code Standards**: PSR-12 Coding Standards
+2.  **Testing**: All new features require tests
+3.  **Documentation**: Inline documentation required
+4.  **Security**: Security review for all PRs
 
 ### Git Workflow
-1. Feature Branches von `develop`
-2. Pull Requests mit Code Review
-3. Automated Testing vor Merge
-4. Semantic Versioning
+1.  Feature Branches from `develop`
+2.  Pull Requests with Code Review
+3.  Automated Testing before Merge
+4.  Semantic Versioning
 
-## 📞 Support & Kontakt
+## 📄 License
 
-### Entwicklungsteam
-- **Lead Developer**: [Name]
-- **Backend Developer**: [Name]
-- **Frontend Developer**: [Name]
-- **QA Engineer**: [Name]
-
-### Support-Kanäle
-- **Bug Reports**: GitHub Issues
-- **Feature Requests**: GitHub Discussions
-- **Documentation**: Wiki
-- **Emergency**: [Kontakt]
-
-## 📄 Lizenz
-
-Dieses Projekt ist für den internen Gebrauch entwickelt und unterliegt den Unternehmensrichtlinien.
-
----
-
-**Version**: 1.0.0  
-**Letztes Update**: 26. Juni 2025  
-**Nächstes Review**: 26. September 2025
+This project is developed for internal use and is subject to company policies.

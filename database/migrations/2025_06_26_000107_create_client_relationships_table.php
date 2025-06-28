@@ -16,13 +16,13 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->foreignId('related_client_id')->constrained('clients')->onDelete('cascade');
             $table->enum('relationship_type', [
-                'spouse', 'partner', 'child', 'parent', 'sibling', 
-                'grandparent', 'grandchild', 'friend', 'colleague', 'other'
+                'spouse', 'partner', 'child', 'parent', 'sibling',
+                'grandparent', 'grandchild', 'friend', 'colleague', 'other',
             ]);
             $table->text('description')->nullable();
             $table->boolean('is_emergency_contact')->default(false);
             $table->timestamps();
-            
+
             $table->unique(['client_id', 'related_client_id']);
         });
     }

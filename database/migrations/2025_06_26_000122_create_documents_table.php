@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('mime_type');
             $table->integer('file_size'); // in bytes
             $table->enum('document_type', [
-                'intake_form', 'assessment', 'treatment_plan', 'progress_note', 
-                'consent_form', 'insurance', 'medical_record', 'other'
+                'intake_form', 'assessment', 'treatment_plan', 'progress_note',
+                'consent_form', 'insurance', 'medical_record', 'other',
             ])->default('other');
             $table->boolean('is_confidential')->default(true);
             $table->json('tags')->nullable();

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Client extends Model
 {
@@ -35,13 +35,13 @@ class Client extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($client) {
             if (empty($client->client_number)) {
-                $client->client_number = 'CL' . str_pad(
-                    (static::max('id') ?? 0) + 1, 
-                    6, 
-                    '0', 
+                $client->client_number = 'CL'.str_pad(
+                    (static::max('id') ?? 0) + 1,
+                    6,
+                    '0',
                     STR_PAD_LEFT
                 );
             }
@@ -50,7 +50,7 @@ class Client extends Model
 
     public function getFullNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getAgeAttribute(): ?int
@@ -82,14 +82,14 @@ class Client extends Model
     public function relatedClients(): BelongsToMany
     {
         return $this->belongsToMany(Client::class, 'client_relationships', 'client_id', 'related_client_id')
-                    ->withPivot('relationship_type', 'description', 'is_emergency_contact')
-                    ->withTimestamps();
+            ->withPivot('relationship_type', 'description', 'is_emergency_contact')
+            ->withTimestamps();
     }
 
     public function reverseRelatedClients(): BelongsToMany
     {
         return $this->belongsToMany(Client::class, 'client_relationships', 'related_client_id', 'client_id')
-                    ->withPivot('relationship_type', 'description', 'is_emergency_contact')
-                    ->withTimestamps();
+            ->withPivot('relationship_type', 'description', 'is_emergency_contact')
+            ->withTimestamps();
     }
 }

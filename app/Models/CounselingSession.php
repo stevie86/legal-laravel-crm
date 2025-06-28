@@ -40,7 +40,7 @@ class CounselingSession extends Model
 
     public function getStatusBadgeClassAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'scheduled' => 'badge-primary',
             'completed' => 'badge-success',
             'cancelled' => 'badge-danger',

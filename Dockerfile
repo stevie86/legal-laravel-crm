@@ -1,88 +1,75 @@
-# --- Composer Stage ---
-FROM composer:2.7 AS composer
+# Dockerfile for a production Laravel application on Fly.io
 
-# --- Node Build Stage ---
-FROM node:20-alpine AS nodebuild
+# 1. Builder stage for PHP dependencies
+FROM composer:2 as composer_vendor
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev || npm install --omit=dev
-COPY resources/ ./resources/
-COPY vite.config.js ./
-COPY public/ ./public/
-RUN npm run build || npm run prod || true
+COPY . .
+# Install dependencies, optimizing for production
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-# --- Main Stage ---
-ARG CACHEBUST=1
-FROM php:8.2-fpm-alpine
 
-# System dependencies
+# 2. Builder stage for frontend assets
+FROM node:18-alpine as node_assets
+
+WORKDIR /app
+COPY . .
+# Install and build assets for production
+RUN npm install && npm run build
+
+
+# 3. Final production image
+FROM php:8.2-fpm-alpine as production
+
+# Install system dependencies required by Laravel and Nginx
 RUN apk add --no-cache \
     nginx \
     supervisor \
-    sqlite \
-    sqlite-dev \
-    git \
-    curl \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
+    libzip-dev \
     zip \
-    unzip
+    libpng-dev \
+    jpeg-dev \
+    freetype-dev \
+    # For PostgreSQL
+    postgresql-dev
 
-# PHP Extensions
+# Install required PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        gd \
-        pdo \
-        pdo_sqlite \
-        pdo_mysql \
-        bcmath \
-        opcache
+    gd \
+    zip \
+    pdo \
+    pdo_pgsql \
+    exif \
+    bcmath
 
-# Composer installieren
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+# Set up a non-root user
+RUN addgroup -g 1000 -S www && \
+    adduser -u 1000 -S www -G www
 
-WORKDIR /app
+# Copy configuration files from your repository into the image
+COPY .fly/nginx.conf /etc/nginx/nginx.conf
+COPY .fly/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY .fly/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY .fly/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-# Nur die für Composer nötigen Dateien kopieren
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+# Set working directory
+WORKDIR /var/www/html
 
-# Anwendungscode kopieren (ohne node_modules, ohne .env)
-COPY app/ ./app/
-COPY bootstrap/ ./bootstrap/
-COPY config/ ./config/
-COPY database/ ./database/
-COPY public/ ./public/
-COPY resources/ ./resources/
-COPY routes/ ./routes/
-COPY artisan ./
-COPY vendor/ ./vendor/
+# Copy application code and built assets from builder stages
+COPY --from=composer_vendor /app/vendor ./vendor
+COPY --from=node_assets /app/public ./public
+COPY . .
 
-# Gebaute Assets aus Node-Stage übernehmen (Passe ggf. den Pfad an!)
-COPY --from=nodebuild /app/public/build ./public/build
+# Set correct permissions for storage and bootstrap/cache
+RUN chown -R www:www /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Laravel optimieren
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
-# Berechtigungen setzen
-RUN chown -R www-data:www-data /app \
-    && chmod -R 755 /app/storage \
-    && chmod -R 755 /app/bootstrap/cache
-
-# Nginx/Supervisor Konfiguration
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/http.d/default.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# PHP-FPM Konfiguration
-RUN echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
-
+# Expose port 8080 for Nginx
 EXPOSE 8080
 
-COPY docker/start.sh /start.sh
-RUN chmod +x /start.sh
+# Entrypoint script to run optimizations and start services
+COPY .fly/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-CMD ["/start.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

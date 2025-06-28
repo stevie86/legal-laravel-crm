@@ -2,12 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\CalendarEvent;
 use App\Models\Client;
 use App\Models\CounselingSession;
-use App\Models\CalendarEvent;
-use Illuminate\Database\Seeder;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,11 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Erstelle einen Test-Benutzer
-        $user = User::factory()->create([
-            'name' => 'Dr. Maria Müller',
-            'email' => 'beraterin@example.com',
+        // Call the UserSeeder to create the Admin and Counselor roles and users.
+        $this->call([
+            UserSeeder::class,
         ]);
+
+        // Create a test user idempotently (won't fail on re-run)
+        $user = User::firstOrCreate(
+            ['email' => 'beraterin@example.com'],
+            [
+                'name' => 'Dr. Maria Müller',
+                'password' => Hash::make('password'),
+            ]
+        );
 
         // Erstelle Test-Klienten
         $clients = [
@@ -101,7 +110,7 @@ class DatabaseSeeder extends Seeder
                     'user_id' => $user->id,
                     'client_id' => $client->id,
                     'counseling_session_id' => $session->id,
-                    'title' => $session->title . ' - ' . $client->full_name,
+                    'title' => $session->title.' - '.$client->full_name,
                     'description' => $session->description,
                     'start_time' => $session->scheduled_at,
                     'end_time' => $session->scheduled_at->copy()->addMinutes($session->duration_minutes),

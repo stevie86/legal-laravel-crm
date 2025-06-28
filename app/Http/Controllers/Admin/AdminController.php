@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Client;
 use App\Models\CounselingSession;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -30,6 +30,7 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::latest()->paginate(15);
+
         return view('admin.users.index', compact('users'));
     }
 

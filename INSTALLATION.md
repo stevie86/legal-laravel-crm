@@ -1,173 +1,122 @@
-# Beratungs-CRM Installation
+# Installation Guide
 
-## Systemanforderungen
+This guide provides instructions for setting up the Legal Laravel CRM for both local development using Laravel Sail and for production deployment on Fly.io.
 
-- PHP 8.2 oder höher
-- Composer
-- SQLite (oder MySQL/PostgreSQL)
-- Node.js & NPM (optional, für Frontend-Assets)
+## Local Development with Laravel Sail
 
-## Installation
+### Prerequisites
+- Docker Desktop
 
-### 1. Projekt herunterladen
+### Steps
 
-```bash
-# Option A: Git Clone (falls Repository verfügbar)
-git clone <repository-url> beratungs-crm
-cd beratungs-crm
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/legal-laravel-crm.git
+    cd legal-laravel-crm
+    ```
 
-# Option B: ZIP-Datei entpacken
-unzip beratungs-crm.zip
-cd beratungs-crm
-```
+2.  **Create a `.env` file:**
+    ```bash
+    cp .env.example .env
+    ```
 
-### 2. Dependencies installieren
+3.  **Install Composer dependencies:**
+    ```bash
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php82-composer:latest \
+        composer install --ignore-platform-reqs
+    ```
 
-```bash
-# PHP Dependencies
-composer install
+4.  **Start the Sail containers:**
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
 
-# Frontend Dependencies (optional)
-npm install
-```
+5.  **Publish the configuration for Spatie Permissions:**
+    This package is used for role and permission management.
+    ```bash
+    ./vendor/bin/sail artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+    ```
 
-### 3. Umgebung konfigurieren
+6.  **Generate the application key:**
+    ```bash
+    ./vendor/bin/sail artisan key:generate
+    ```
 
-```bash
-# .env Datei erstellen
-cp .env.example .env
+7.  **Run database migrations and seed the database:**
+    This will create all necessary tables, including those for roles and permissions.
+    ```bash
+    ./vendor/bin/sail artisan migrate --seed
+    ```
 
-# Application Key generieren
-php artisan key:generate
-```
+8.  **Install NPM dependencies and build assets:**
+    ```bash
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev
+    ```
 
-### 4. Datenbank einrichten
+Your application is now available at the URL specified by `APP_URL` in your `.env` file (by default: http://localhost).
 
-```bash
-# SQLite Datenbank erstellen (Standard)
-touch database/database.sqlite
+### Default Users
 
-# Migrationen ausführen
-php artisan migrate
+-   **Admin:** `admin@example.com` / `password`
+-   **Counselor:** `counselor@example.com` / `password`
 
-# Testdaten laden (optional)
-php artisan db:seed
-```
+## Production Deployment with Fly.io
 
-### 5. Storage verlinken
+### Prerequisites
 
-```bash
-php artisan storage:link
-```
+-   [Fly.io account](https://fly.io/)
+-   `flyctl` CLI installed and authenticated
+-   A PostgreSQL database on Fly.io
 
-### 6. Server starten
+### Steps
 
-```bash
-# Entwicklungsserver
-php artisan serve
+1.  **Launch the app on Fly.io:**
+    ```bash
+    flyctl launch
+    ```
+    This will create a `fly.toml` file and a `Dockerfile`.
 
-# Oder mit spezifischem Host/Port
-php artisan serve --host=0.0.0.0 --port=8000
-```
+2.  **Set the application key as a secret:**
+    ```bash
+    flyctl secrets set APP_KEY=$(php artisan key:generate --show)
+    ```
 
-## Konfiguration
+3.  **Set the `DATABASE_URL` secret:**
+    Get your database connection string from the Fly.io dashboard and set it as a secret:
+    ```bash
+    flyctl secrets set DATABASE_URL="your-postgres-connection-string"
+    ```
 
-### Datenbank
+4.  **Deploy the application:**
+    ```bash
+    flyctl deploy
+    ```
 
-Die Anwendung ist standardmäßig für SQLite konfiguriert. Für andere Datenbanken bearbeiten Sie die `.env` Datei:
+5.  **Run database migrations:**
+    Connect to the production instance and run the migrations:
+    ```bash
+    flyctl ssh console -C "php artisan migrate --force"
+    ```
 
-```env
-# MySQL Beispiel
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=beratungs_crm
-DB_USERNAME=root
-DB_PASSWORD=
-```
+## Troubleshooting
 
-### E-Mail (optional)
+### Creating a Super-Admin User
 
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-password
-MAIL_ENCRYPTION=tls
-```
+If you are unable to log in with the default seeded credentials, or if you prefer to create your own administrator account, you can use the following Artisan command.
 
-## Funktionen
+1.  **For local development with Sail:**
+    ```bash
+    ./vendor/bin/sail artisan crm:create-super-admin
+    ```
 
-### ✅ Implementiert
+2.  **For production on Fly.io:**
+    ```bash
+    flyctl ssh console -C "php artisan crm:create-super-admin"
+    ```
 
-- **Dashboard** mit Statistiken und Übersichten
-- **Klientenverwaltung** (CRUD, Suche, Filter)
-- **Beratungssitzungen** (Planung, Verwaltung, Status)
-- **Kalenderansicht** mit Monatsübersicht
-- **Responsive Design** mit Bootstrap
-- **Datenbank-Seeding** mit Testdaten
-
-### ✅ Implementiert
-
-- **Benutzerauthentifizierung** mit Rollen (Admin, Berater)
-- **Dashboard** mit Statistiken und Übersichten
-- **Klientenverwaltung** (CRUD, Suche, Filter)
-- **Beratungssitzungen** (Planung, Verwaltung, Status)
-- **Kalenderansicht** mit Monatsübersicht
-- **Responsive Design** mit Bootstrap
-- **Datenbank-Seeding** mit Testdaten
-
-### 🚧 In Entwicklung
-
-- Dokumentenverwaltung mit Datei-Upload
-- Sitzungsnotizen-System
-- E-Mail-Benachrichtigungen
-- Berichte und Statistiken
-- API-Endpunkte
-
-## Verwendung
-
-### Authentifizierung & Rollen
-
-Das System verwendet eine rollenbasierte Authentifizierung. Alle Routen erfordern eine Anmeldung.
-
-- **Administrator (`admin`)**: Hat vollen Zugriff auf alle Funktionen, einschließlich Benutzerverwaltung und Systemeinstellungen.
-- **Berater (`counselor`)**: Kann Klienten, Sitzungen und Dokumente verwalten.
-- **Standard-Benutzer**: Hat Zugriff auf das Dashboard und das eigene Profil.
-
-### Standard-Benutzer
-
-Nach der Migration und dem Seeding der Datenbank können Sie sich mit folgenden Test-Benutzern anmelden:
-
-- **Admin**: `admin@example.com` / `password`
-- **Berater**: `counselor@example.com` / `password`
-
-### Navigation
-
-### Navigation
-
-- **Dashboard**: Übersicht und Statistiken
-- **Klienten**: Klientenverwaltung und -details
-- **Sitzungen**: Terminplanung und -verwaltung
-- **Kalender**: Monatsansicht aller Termine
-- **Dokumente**: Dateiverwaltung (in Entwicklung)
-
-### Testdaten
-
-Das System enthält Beispieldaten:
-- 3 Testklienten
-- Mehrere Beratungssitzungen
-- Kalendereinträge
-
-## Support
-
-Bei Fragen oder Problemen:
-1. Prüfen Sie die Laravel-Logs: `storage/logs/laravel.log`
-2. Stellen Sie sicher, dass alle Dependencies installiert sind
-3. Überprüfen Sie die Datenbankverbindung
-4. Kontaktieren Sie den Entwickler
-
-## Lizenz
-
-Dieses Projekt ist für den internen Gebrauch entwickelt.
+The command will prompt you to enter a name, email, and password for the new super-admin account.

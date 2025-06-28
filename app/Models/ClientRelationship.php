@@ -21,7 +21,7 @@ class ClientRelationship extends Model
 
     public function getRelationshipTypeDisplayAttribute(): string
     {
-        return match($this->relationship_type) {
+        return match ($this->relationship_type) {
             'spouse' => 'Ehepartner/in',
             'partner' => 'Partner/in',
             'child' => 'Kind',

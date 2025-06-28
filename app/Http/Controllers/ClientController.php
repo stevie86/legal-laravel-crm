@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Client;
-use App\Models\ClientRelationship;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -15,11 +14,11 @@ class ClientController extends Controller
         // Suchfunktion
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('client_number', 'like', "%{$search}%");
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('client_number', 'like', "%{$search}%");
             });
         }
 
@@ -62,22 +61,22 @@ class ClientController extends Controller
         $client = Client::create($validated);
 
         return redirect()->route('clients.show', $client)
-                        ->with('success', 'Klient wurde erfolgreich erstellt.');
+            ->with('success', 'Klient wurde erfolgreich erstellt.');
     }
 
     public function show(Client $client)
     {
         $client->load([
-            'counselingSessions' => function($query) {
+            'counselingSessions' => function ($query) {
                 $query->orderBy('scheduled_at', 'desc')->limit(10);
             },
-            'documents' => function($query) {
+            'documents' => function ($query) {
                 $query->orderBy('created_at', 'desc')->limit(10);
             },
             'relationships.relatedClient',
-            'calendarEvents' => function($query) {
+            'calendarEvents' => function ($query) {
                 $query->orderBy('start_time', 'desc')->limit(5);
-            }
+            },
         ]);
 
         return view('clients.show', compact('client'));
@@ -93,7 +92,7 @@ class ClientController extends Controller
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:clients,email,' . $client->id,
+            'email' => 'nullable|email|unique:clients,email,'.$client->id,
             'phone' => 'nullable|string|max:255',
             'mobile' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date',
@@ -112,7 +111,7 @@ class ClientController extends Controller
         $client->update($validated);
 
         return redirect()->route('clients.show', $client)
-                        ->with('success', 'Klientendaten wurden erfolgreich aktualisiert.');
+            ->with('success', 'Klientendaten wurden erfolgreich aktualisiert.');
     }
 
     public function destroy(Client $client)
@@ -120,6 +119,6 @@ class ClientController extends Controller
         $client->delete();
 
         return redirect()->route('clients.index')
-                        ->with('success', 'Klient wurde erfolgreich gelöscht.');
+            ->with('success', 'Klient wurde erfolgreich gelöscht.');
     }
 }

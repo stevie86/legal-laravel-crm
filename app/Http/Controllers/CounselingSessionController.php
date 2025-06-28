@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\CounselingSession;
-use App\Models\Client;
 use App\Models\CalendarEvent;
-use App\Models\User;
+use App\Models\Client;
+use App\Models\CounselingSession;
+use Illuminate\Http\Request;
 
 class CounselingSessionController extends Controller
 {
@@ -42,7 +41,7 @@ class CounselingSessionController extends Controller
     {
         $clients = Client::where('status', 'active')->orderBy('last_name')->get();
         $selectedClient = null;
-        
+
         if ($request->filled('client_id')) {
             $selectedClient = Client::find($request->client_id);
         }
@@ -74,7 +73,7 @@ class CounselingSessionController extends Controller
             'user_id' => $validated['user_id'],
             'client_id' => $session->client_id,
             'counseling_session_id' => $session->id,
-            'title' => $session->title . ' - ' . $session->client->full_name,
+            'title' => $session->title.' - '.$session->client->full_name,
             'description' => $session->description,
             'start_time' => $session->scheduled_at,
             'end_time' => $session->scheduled_at->copy()->addMinutes((int) $session->duration_minutes),
@@ -84,7 +83,7 @@ class CounselingSessionController extends Controller
         ]);
 
         return redirect()->route('sessions.show', $session)
-                        ->with('success', 'Beratungssitzung wurde erfolgreich erstellt.');
+            ->with('success', 'Beratungssitzung wurde erfolgreich erstellt.');
     }
 
     public function show(CounselingSession $session)
@@ -123,7 +122,7 @@ class CounselingSessionController extends Controller
         if ($calendarEvent) {
             $calendarEvent->update([
                 'client_id' => $session->client_id,
-                'title' => $session->title . ' - ' . $session->client->full_name,
+                'title' => $session->title.' - '.$session->client->full_name,
                 'description' => $session->description,
                 'start_time' => $session->scheduled_at,
                 'end_time' => $session->scheduled_at->copy()->addMinutes($session->duration_minutes),
@@ -132,17 +131,17 @@ class CounselingSessionController extends Controller
         }
 
         return redirect()->route('sessions.show', $session)
-                        ->with('success', 'Beratungssitzung wurde erfolgreich aktualisiert.');
+            ->with('success', 'Beratungssitzung wurde erfolgreich aktualisiert.');
     }
 
     public function destroy(CounselingSession $session)
     {
         // Lösche entsprechende Kalender-Events
         $session->calendarEvents()->delete();
-        
+
         $session->delete();
 
         return redirect()->route('sessions.index')
-                        ->with('success', 'Beratungssitzung wurde erfolgreich gelöscht.');
+            ->with('success', 'Beratungssitzung wurde erfolgreich gelöscht.');
     }
 }

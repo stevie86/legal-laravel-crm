@@ -45,8 +45,8 @@ class CalendarEvent extends Model
         if ($this->all_day) {
             return $this->start_time->format('d.m.Y');
         }
-        
-        return $this->start_time->format('d.m.Y H:i') . ' - ' . $this->end_time->format('H:i');
+
+        return $this->start_time->format('d.m.Y H:i').' - '.$this->end_time->format('H:i');
     }
 
     // Beziehungen
